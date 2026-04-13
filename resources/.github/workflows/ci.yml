@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test og bygg
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Sett opp Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: resources/job-reader-app/go.mod
+
+      - name: Vet (statisk analyse)
+        run: go vet ./...
+        working-directory: resources/job-reader-app
+
+      - name: Kjør tester
+        run: go test -v ./...
+        working-directory: resources/job-reader-app
+
+      - name: Bygg
+        run: go build -o job-reader .
+        working-directory: resources/job-reader-app
