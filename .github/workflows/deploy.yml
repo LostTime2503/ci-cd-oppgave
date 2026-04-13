@@ -1,0 +1,46 @@
+name: Deploy Status Page
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Hent commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Lag _site mappe
+        run: mkdir _site
+
+      - name: Kopier status-page
+        run: cp resources/status-page/index.html _site/index.html
+
+      - name: Sett inn metadata i HTML
+        run: |
+          sed -i "s|{{COMMIT_SHA}}|${{ steps.vars.outputs.sha_short }}|g" _site/index.html
+          sed -i "s|{{IMAGE_TAG}}|latest|g" _site/index.html
+          sed -i "s|{{BUILD_TIME}}|$(date)|g" _site/index.html
+
+      - name: Last opp artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy til GitHub Pages
+        uses: actions/deploy-pages@v4
