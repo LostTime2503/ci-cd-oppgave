@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Reader – Build Status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        h1 { color: #58a6ff; margin-bottom: 0.5rem; }
+        .subtitle { color: #8b949e; margin-bottom: 2rem; }
+        .card {
+            background: #16213e;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 600px;
+        }
+        .card h2 { color: #58a6ff; font-size: 1.1rem; margin-bottom: 0.75rem; }
+        .row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #21262d; }
+        .row:last-child { border-bottom: none; }
+        .label { color: #8b949e; }
+        .value { color: #e0e0e0; font-family: monospace; }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-success { background: #238636; color: #fff; }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        footer {
+            margin-top: auto;
+            padding-top: 2rem;
+            color: #484f58;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Job Reader App</h1>
+    <p class="subtitle">Build &amp; Deploy Status</p>
+
+    <div class="card">
+        <h2>Siste bygg</h2>
+        <div class="row">
+            <span class="label">Status</span>
+            <span class="badge badge-success">Deployed</span>
+        </div>
+        <div class="row">
+            <span class="label">Commit</span>
+            <span class="value">{{COMMIT_SHA}}</span>
+        </div>
+        <div class="row">
+            <span class="label">Tidspunkt</span>
+            <span class="value">{{BUILD_TIME}}</span>
+        </div>
+        <div class="row">
+            <span class="label">Docker-image</span>
+            <span class="value">{{IMAGE_TAG}}</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Lenker</h2>
+        <div class="row">
+            <span class="label">Container Registry</span>
+            <a href="{{GHCR_URL}}">ghcr.io</a>
+        </div>
+        <div class="row">
+            <span class="label">Repository</span>
+            <a href="{{REPO_URL}}">GitHub</a>
+        </div>
+    </div>
+
+    <footer>
+        Generert av GitHub Actions &middot; Commit {{COMMIT_SHORT}}
+    </footer>
+</body>
+</html>
